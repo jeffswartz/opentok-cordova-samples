@@ -27,17 +27,38 @@ var app = {
     // Bind any cordova events here. Common events are:
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
+      
+      // Set Credentials
+        var apiKey = "";
+        var sessionId = "";
+        var token = "";
+        
+        // Initialize Session Object
+        var session = TB.initSession(apiKey, sessionId);
+        
+        // initialize a publisher
+        var publisher = TB.initPublisher(apiKey, 'publisher');
+        
+        session.on({
+          streamCreated: (event) => {
+            session.subscribe(event.stream, 'subscriber');
+          },
+          streamDestroyed: (event) => {
+            console.log(`Stream ${event.stream.name} ended because ${event.reason}.`);
+          }
+        });
+        
+        session.connect(token, () => {
+          
+          // publish to the session
+          session.publish(publisher);
+        });
         this.receivedEvent('deviceready');
     },
 
     // Update DOM on a Received Event
     receivedEvent: function(id) {
         var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
-
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
 
         console.log('Received Event: ' + id);
     }
