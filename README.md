@@ -7,8 +7,14 @@ This sample application shows how to connect to an OpenTok session, publish a st
 Get values for your OpenTok API key, session ID, and token. You can obtain these values from your TokBox account. Make sure that the token isn't expired.
 For testing, you can use a session ID and token generated at your TokBox account page. However, the final application should obtain these values using the [OpenTok server SDKs](https://tokbox.com/developer/sdks/server/). For more information, see the OpenTok developer guides on [session creation](https://tokbox.com/developer/guides/create-session/) and [token creation](https://tokbox.com/developer/guides/create-token/).
 
-Note: Please make sure to run the commands in the same order as below
+### Prerequisites:
 
+1. [Node.js](https://nodejs.org)
+2. [Cordova](https://www.npmjs.com/package/cordova): ```sudo npm install -g cordova```
+3. [Xcode](https://developer.apple.com/xcode/)
+4. [Android Studio](https://developer.android.com/studio/index.html)
+
+##### Note: Please make sure to run the commands in the same order as below
 
 1. Clone this repo
 
