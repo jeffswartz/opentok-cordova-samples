@@ -4,14 +4,17 @@ OpenTok Cordova Basic Video Chat
 This sample application shows how to connect to an OpenTok session, publish a stream, and subscribe to a stream in a basic Cordova iOS & Android application.
 
 ## Quick Start
-1. Get values for your OpenTok API key, session ID, and token. You can obtain these values from your TokBox account. Make sure that the token isn't expired.
+Get values for your OpenTok API key, session ID, and token. You can obtain these values from your TokBox account. Make sure that the token isn't expired.
 For testing, you can use a session ID and token generated at your TokBox account page. However, the final application should obtain these values using the [OpenTok server SDKs](https://tokbox.com/developer/sdks/server/). For more information, see the OpenTok developer guides on [session creation](https://tokbox.com/developer/guides/create-session/) and [token creation](https://tokbox.com/developer/guides/create-token/).
 
-2. Clone this repo
+Note: Please make sure to run the commands in the same order as below
 
-3. ```$ cordova prepare```
 
-4. ```$ npm install ```
+1. Clone this repo
+
+2. In your terminal run: ```$ cordova prepare```
+
+3. Next run: ```$ npm install ```
 
 ## Getting an OpenTok session ID, token, and API key
 
@@ -38,21 +41,25 @@ overview](https://tokbox.com/opentok/tutorials/create-token/).
 
 **API key** -- The API key identifies your OpenTok developer account.
 
-## Connecting to the session
+## Exploring the code:
+
+Open ```wwww/js/index.js``` file and add your ```apiKey```, ```sessionId```, and ```token```:
+
+### Connecting to the session
 
 First, this method initializes a Session object:
 ```
     // Set Credentials
-    var apiKey = "";
-    var sessionId = "";
-    var token = "";
+    var apiKey = ""; // Add your API Key
+    var sessionId = ""; // Add the Session ID
+    var token = ""; // Add the token
 ```
 
 Upon obtaining the session ID, token, and API, we initialize the session.
 
   ``` 
     // Initialize Session Object
-    var session = OT.initSession(apiKey, sessionId);
+    var session = TB.initSession(apiKey, sessionId);
   ```
 
 The `TB.initSession()` method takes two parameters -- the OpenTok API key and the session ID. It
@@ -79,7 +86,7 @@ The Session object dispatches a `streamDestroyed` event when the stream is destr
   });
 ```
 
-## Publishing an audio video stream to the session
+### Publishing an audio video stream to the session
 
 Upon successfully connecting to the OpenTok session (see the previous section), the application
 initializes an OpenTok Publisher object and publishes an audio-video stream to the session. This is
@@ -104,7 +111,7 @@ method of the Session object:
 ```
   session.publish(publisher);
 ```
-## Subscribing to another client's audio-video stream
+### Subscribing to another client's audio-video stream
 
 The Session object dispatches a `streamCreated` event when a new stream (other than your own) is
 created in a session. A stream is created when a client publishes to the session. The
@@ -118,9 +125,7 @@ representing stream that was created. The application adds an event listener for
     // Subscribe to a newly created stream
     session.on({
       streamCreated: (event) => {
-        session.subscribe(event.stream, 'subscriber', (error) => {
-          console.log(`There was an error subscribing. Error: ${error}`);
-        });
+        session.subscribe(event.stream, 'subscriber');
       }
     });
 ```
@@ -131,18 +136,20 @@ The `session.subscribe()` method takes four parameters:
 * A set of properties (optional) that customize the appearance of the subscriber view
 * Optional Completion handler
 
-## Running the application
+### Running the application
 
-# For Android: 
+#### For Android: 
 1. ```cordova prepare android```
-2. Open project in Android Studio
+2. Open Android Studio
+3. Under ```platforms/android``` select ```build.gradle``` 
 3. Run
 
 Note: If you're using the simulator, you will see a black container for your publisher since the simulator doesn't have a camera.
 
-# For iOS
+#### For iOS
 1. ```cordova prepare iOS```
-2. Open the project in XCode
+2. Open Xcode
+4. Under ```platforms/ios``` select ```HelloCordova.xcodeproj```
 3. Sign the project
 4. Run
 
