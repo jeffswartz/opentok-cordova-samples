@@ -34,10 +34,10 @@ var app = {
         var token = "";
         
         // Initialize Session Object
-        var session = TB.initSession(apiKey, sessionId);
+        var session = OT.initSession(apiKey, sessionId);
         
         // initialize a publisher
-        var publisher = TB.initPublisher(apiKey, 'publisher');
+        var publisher = OT.initPublisher(apiKey, 'publisher');
         
         session.on({
           streamCreated: (event) => {

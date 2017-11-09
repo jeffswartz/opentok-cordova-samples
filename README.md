@@ -47,9 +47,30 @@ overview](https://tokbox.com/opentok/tutorials/create-token/).
 
 **API key** -- The API key identifies your OpenTok developer account.
 
-## Exploring the code:
+### Running the application:
 
 Open ```wwww/js/index.js``` file and add your ```apiKey```, ```sessionId```, and ```token```:
+
+#### For Android: 
+1. ```cordova prepare android```
+2. Open Android Studio
+3. Click ```Open an existing Android Studio project```
+3. Under ```platforms/android``` select ```build.gradle``` 
+3. Click run
+
+Note: If you're using the simulator, you will see a black container for your publisher since the simulator doesn't have a camera.
+
+#### For iOS
+1. ```cordova prepare iOS```
+2. Open Xcode
+3. Click ```Open another project...```
+3. Under ```platforms/ios``` select ```HelloCordova.xcodeproj```
+4. Sign the project
+5. Run
+
+Note: If you're using the simulator, you will see a simulation for your publisher since the simulator doesn't have a camera.
+
+## Exploring the code
 
 ### Connecting to the session
 
@@ -65,10 +86,10 @@ Upon obtaining the session ID, token, and API, we initialize the session.
 
   ``` 
     // Initialize Session Object
-    var session = TB.initSession(apiKey, sessionId);
+    var session = OT.initSession(apiKey, sessionId);
   ```
 
-The `TB.initSession()` method takes two parameters -- the OpenTok API key and the session ID. It
+The `OT.initSession()` method takes two parameters -- the OpenTok API key and the session ID. It
 initializes and returns an OpenTok Session object.
 
 The `connect()` method of the Session object connects the client application to the OpenTok
@@ -99,7 +120,7 @@ initializes an OpenTok Publisher object and publishes an audio-video stream to t
 done inside the completion handler for the connect() method, since you should only publish to the
 session once you are connected to it.
 
-The Publisher object is initialized as shown below. The `TB.initPublisher()` method takes two
+The Publisher object is initialized as shown below. The `OT.initPublisher()` method takes two
 parameters:
 
 * The API key
@@ -107,7 +128,7 @@ parameters:
 * A set of publisher properties (optional)
 
 ```
-  var publisher = TB.initPublisher(apiKey, 'publisher');
+  var publisher = OT.initPublisher(apiKey, 'publisher');
 
 ```
 
@@ -141,22 +162,3 @@ The `session.subscribe()` method takes four parameters:
 * The target DOM element or DOM element ID (optional) for placement of the subscriber video
 * A set of properties (optional) that customize the appearance of the subscriber view
 * Optional Completion handler
-
-### Running the application
-
-#### For Android: 
-1. ```cordova prepare android```
-2. Open Android Studio
-3. Under ```platforms/android``` select ```build.gradle``` 
-3. Run
-
-Note: If you're using the simulator, you will see a black container for your publisher since the simulator doesn't have a camera.
-
-#### For iOS
-1. ```cordova prepare iOS```
-2. Open Xcode
-4. Under ```platforms/ios``` select ```HelloCordova.xcodeproj```
-3. Sign the project
-4. Run
-
-Note: If you're using the simulator, you will see a simulation for your publisher since the simulator doesn't have a camera.
