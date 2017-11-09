@@ -1,13 +1,9 @@
 OpenTok Cordova Basic Video Chat
 =======================
 
-This sample application shows how to connect to an OpenTok session, publish a stream, and subscribe to a stream in a basic Cordova iOS & Android application.
+This sample application shows how to connect to an OpenTok session, publish a stream, and subscribe to a stream in a basic Cordova iOS and Android application.
 
-## Quick Start
-Get values for your OpenTok API key, session ID, and token. You can obtain these values from your TokBox account. Make sure that the token isn't expired.
-For testing, you can use a session ID and token generated at your TokBox account page. However, the final application should obtain these values using the [OpenTok server SDKs](https://tokbox.com/developer/sdks/server/). For more information, see the OpenTok developer guides on [session creation](https://tokbox.com/developer/guides/create-session/) and [token creation](https://tokbox.com/developer/guides/create-token/).
-
-### Prerequisites:
+## Prerequisites:
 
 1. [Node.js](https://nodejs.org)
 2. [Cordova](https://www.npmjs.com/package/cordova): ```sudo npm install -g cordova```
@@ -22,51 +18,54 @@ For testing, you can use a session ID and token generated at your TokBox account
 
 3. Next run: ```$ npm install ```
 
-## Getting an OpenTok session ID, token, and API key
+## Configuring the application
+
+Before running the application, you need to configure it to use the API key for your
+OpenTok project, along with an OpenTok session ID and token. For test purposes, you can
+get a test session ID and token for your project at your [TokBox account
+page](https://tokbox.com/account).
+
+Open the wwww/js/index.js file and set the `apiKey`, `sessionId`, and `token` values to
+the API key, session ID, and token:
+
+```
+    // Set Credentials
+    var apiKey = '';    // Add your API key.
+    var sessionId = ''; // Add the session ID.
+    var token = '';     // Add the token.
+```
 
 An OpenTok session connects different clients letting them share audio-video streams and send
 messages. Clients in the same session can include iOS, Android, and web browsers.
 
-**Session ID** -- Each client that connects to the session needs the session ID, which identifies
-the session. Think of a session as a room, in which clients meet. Depending on the requirements of
-your application, you will either reuse the same session (and session ID) repeatedly or generate
-new session IDs for new groups of clients.
+For testing, you can use a session ID and token generated at your TokBox account page.
+However, the final application should obtain these values using the [OpenTok server
+SDKs](https://tokbox.com/developer/sdks/server/). For more information, see the OpenTok developer
+guides on [session creation](https://tokbox.com/developer/guides/create-session/) and [token
+creation](https://tokbox.com/developer/guides/create-token/).
 
-*Important*: This demo application assumes that only two clients -- the local Web client and
-another client -- will connect in the same OpenTok session. For sample purposes, you can reuse the
-same session ID each time two clients connect. However, in a production application, your
-server-side code must create a unique session ID for each pair of clients. In other applications,
-you may want to connect many clients in one OpenTok session (for instance, a meeting room) and
-connect others in another session (another meeting room).
+## Running the application
 
-**Token** -- The client also needs a token, which grants them access to the session. Each client is
-issued a unique token when they connect to the session. Since the user publishes an audio-video
-stream to the session, the token generated must include the publish role (the default). For more
-information about tokens, see the OpenTok [Token creation
-overview](https://tokbox.com/opentok/tutorials/create-token/).
+#### For Android
 
-**API key** -- The API key identifies your OpenTok developer account.
-
-### Running the application:
-
-Open ```wwww/js/index.js``` file and add your ```apiKey```, ```sessionId```, and ```token```:
-
-#### For Android: 
-1. ```cordova prepare android```
-2. Open Android Studio
-3. Click ```Open an existing Android Studio project```
-3. Under ```platforms/android``` select ```build.gradle``` 
-3. Click run
+1. In the root directory of this project, run `cordova prepare android`.
+2. Open Android Studio.
+3. Click `Open an existing Android Studio project`.
+4. Navigate to the `platforms/android` subdirectory of this project and select
+   the `build.gradle` file.
+5. Click run.
 
 Note: If you're using the simulator, you will see a black container for your publisher since the simulator doesn't have a camera.
 
 #### For iOS
-1. ```cordova prepare iOS```
-2. Open Xcode
-3. Click ```Open another project...```
-3. Under ```platforms/ios``` select ```HelloCordova.xcodeproj```
-4. Sign the project
-5. Run
+
+1. In the root directory of this project, run `cordova prepare iOS`.
+2. Open Xcode.
+3. Click `Open another project...`
+3. Navigate to the `platforms/ios` subdirectory of this project and select
+   `HelloCordova.xcodeproj`.
+4. Sign the project.
+5. Run.
 
 Note: If you're using the simulator, you will see a simulation for your publisher since the simulator doesn't have a camera.
 
@@ -74,15 +73,8 @@ Note: If you're using the simulator, you will see a simulation for your publishe
 
 ### Connecting to the session
 
-First, this method initializes a Session object:
-```
-    // Set Credentials
-    var apiKey = ""; // Add your API Key
-    var sessionId = ""; // Add the Session ID
-    var token = ""; // Add the token
-```
-
-Upon obtaining the session ID, token, and API, we initialize the session.
+The `OT.initSession()` method initialized an OpenTok Session object, using the session ID and
+token (see "Configuring the application" above):
 
   ``` 
     // Initialize Session Object
@@ -106,7 +98,8 @@ and an optional completion handler function:
 
 The Session object dispatches a `streamDestroyed` event when the stream is destroyed. The application defines an event handler for this event:
 
-``` session.on({
+```
+  session.on({
     streamDestroyed: (event) => {
       console.log(`Stream ${event.stream.name} ended because ${event.reason}`);
     }
@@ -117,19 +110,22 @@ The Session object dispatches a `streamDestroyed` event when the stream is destr
 
 Upon successfully connecting to the OpenTok session (see the previous section), the application
 initializes an OpenTok Publisher object and publishes an audio-video stream to the session. This is
-done inside the completion handler for the connect() method, since you should only publish to the
+done inside the completion handler for the `connect()` method, since you should only publish to the
 session once you are connected to it.
 
-The Publisher object is initialized as shown below. The `OT.initPublisher()` method takes two
+The Publisher object is initialized as shown below. The `OT.initPublisher()` method takes three
 parameters:
 
-* The API key
+* The OpenTok API key -- Note: the `OT.initPublisher()` method of the OpenTok Cordova
+  plug-in requires an API key. This differs from the OpenTok.js library for the web, which
+  does not include this parameter.
+
 * The target DOM element or DOM element ID for placement of the publisher video
+
 * A set of publisher properties (optional)
 
 ```
   var publisher = OT.initPublisher(apiKey, 'publisher');
-
 ```
 
 Once the Publisher object is initialized, we publish to the session using the `publish()`
@@ -138,6 +134,7 @@ method of the Session object:
 ```
   session.publish(publisher);
 ```
+
 ### Subscribing to another client's audio-video stream
 
 The Session object dispatches a `streamCreated` event when a new stream (other than your own) is
@@ -156,9 +153,14 @@ representing stream that was created. The application adds an event listener for
       }
     });
 ```
+
 The `session.subscribe()` method takes four parameters:
 
 * The Stream object to which we are subscribing to
 * The target DOM element or DOM element ID (optional) for placement of the subscriber video
 * A set of properties (optional) that customize the appearance of the subscriber view
-* Optional Completion handler
+* An optional completion handler
+
+## More info
+
+See the [OpenTok developer center](https://tokbox.com/developer/). 
