@@ -1,4 +1,3 @@
-@ -0,0 +1,147 @@
 OpenTok Cordova Basic Video Chat
 =======================
 
